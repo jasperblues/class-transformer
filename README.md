@@ -56,7 +56,7 @@ For example you have a list of users in your `users.json` that you are loading:
 ```
 And you have a `User` class:
 
-```typescript
+```javascript
 export class User {
     id: number;
     firstName: string;
@@ -76,7 +76,7 @@ export class User {
 You are assuming that you are downloading users of type `User` from `users.json` file and may want to write
 following code:
 
-```typescript
+```javascript
 fetch("users.json").then((users: User[]) => {
     // you can use users here, and type hinting also will be available to you,
     //  but users are not actually instances of User class
@@ -100,7 +100,7 @@ This library also great for models exposed in your APIs,
 because it provides a great tooling to control what your models are exposing in your API.
 Here is example how it will look like:
 
-```typescript
+```javascript
 fetch("users.json").then((users: Object[]) => {
     const realUsers = plainToClass(User, users);
     // now each user in realUsers is instance of User class
@@ -123,7 +123,7 @@ Now you can use `users[0].getName()` and `users[0].isAdult()` methods.
 
     and make sure to import it in a global place, like app.ts:
 
-    ```typescript
+    ```javascript
     import "reflect-metadata";
     ```
 
@@ -133,7 +133,7 @@ Now you can use `users[0].getName()` and `users[0].isAdult()` methods.
 
    and import it in a global place like app.ts:
 
-    ```typescript
+    ```javascript
     import "es6-shim";
     ```
 
@@ -180,7 +180,7 @@ Now you can use `users[0].getName()` and `users[0].isAdult()` methods.
 
 This method transforms a plain javascript object to instance of specific class.
 
-```typescript
+```javascript
 import {plainToClass} from "class-transformer";
 
 let users = plainToClass(User, userJson); // to convert user plain object a single user. also supports arrays
@@ -190,7 +190,7 @@ let users = plainToClass(User, userJson); // to convert user plain object a sing
 
 This method transforms a plain object into a instance using a already filled Object which is a instance from the target class.
 
-```typescript
+```javascript
 const defaultUser = new User();
 defaultUser.role = 'user';
 
@@ -201,7 +201,7 @@ let mixedUser = plainToClassFromExist(defaultUser, user); // mixed user should h
 
 This method transforms your class object back to plain javascript object, that can be `JSON.stringify` later.
 
-```typescript
+```javascript
 import {classToPlain} from "class-transformer";
 let photo = classToPlain(photo);
 ```
@@ -211,7 +211,7 @@ let photo = classToPlain(photo);
 This method transforms your class object into new instance of the class object.
 This maybe treated as deep clone of your objects.
 
-```typescript
+```javascript
 import {classToClass} from "class-transformer";
 let photo = classToClass(photo);
 ```
@@ -222,7 +222,7 @@ You can also use a `ignoreDecorators` option in transformation options to ignore
 
 You can serialize your model right to the json using `serialize` method:
 
-```typescript
+```javascript
 import {serialize} from "class-transformer";
 let photo = serialize(photo);
 ```
@@ -233,14 +233,14 @@ let photo = serialize(photo);
 
 You can deserialize your model to from a json using `deserialize` method:
 
-```typescript
+```javascript
 import {deserialize} from "class-transformer";
 let photo = deserialize(Photo, photo);
 ```
 
 To make deserialization to work with arrays use `deserializeArray` method:
 
-```typescript
+```javascript
 import {deserializeArray} from "class-transformer";
 let photos = deserializeArray(Photo, photos);
 ```
@@ -250,7 +250,7 @@ let photos = deserializeArray(Photo, photos);
 The default behaviour of the `plainToClass` method is to set *all* properties from the plain object,
 even those which are not specified in the class.
 
-```typescript
+```javascript
 import {plainToClass} from "class-transformer";
 
 class User {
@@ -277,7 +277,7 @@ console.log(plainToClass(User, fromPlainUser))
 If this behaviour does not suit your needs, you can use the `excludeExtraneousValues` option
 in the `plainToClass` method while *exposing all your class properties* as a requirement.
 
-```typescript
+```javascript
 import {Expose, plainToClass} from "class-transformer";
 
 class User {
@@ -312,7 +312,7 @@ This is done using `@Type` decorator.
 Lets say we have an album with photos.
 And we are trying to convert album plain object to class object:
 
-```typescript
+```javascript
 import {Type, plainToClass} from "class-transformer";
 
 export class Album {
@@ -360,7 +360,7 @@ the additional property `__type`. This property is removed during transformation
 }
 ```
 
-```typescript
+```javascript
 import {Type, plainToClass} from "class-transformer";
 
 export abstract class Photo {
@@ -410,7 +410,7 @@ in the options to keep the discriminator property also inside your resulting cla
 
 You can expose what your getter or method return by setting a `@Expose()` decorator to those getters or methods:
 
-```typescript
+```javascript
 import {Expose} from "class-transformer";
 
 export class User {
@@ -437,7 +437,7 @@ export class User {
 If you want to expose some of properties with a different name,
 you can do it by specifying a `name` option to `@Expose` decorator:
 
-```typescript
+```javascript
 import {Expose} from "class-transformer";
 
 export class User {
@@ -464,7 +464,7 @@ export class User {
 Sometimes you want to skip some properties during transformation.
 This can be done using `@Exclude` decorator:
 
-```typescript
+```javascript
 import {Exclude} from "class-transformer";
 
 export class User {
@@ -484,7 +484,7 @@ Now when you transform a User, `password` property will be skipped and not be in
 
 You can control on what operation you will exclude a property. Use `toClassOnly` or `toPlainOnly` options:
 
-```typescript
+```javascript
 import {Exclude} from "class-transformer";
 
 export class User {
@@ -504,7 +504,7 @@ Now `password` property will be excluded only during `classToPlain` operation. O
 
 You can skip all properties of the class, and expose only those are needed explicitly:
 
-```typescript
+```javascript
 import {Exclude, Expose} from "class-transformer";
 
 @Exclude()
@@ -523,7 +523,7 @@ export class User {
 Now `id` and `email` will be exposed, and password will be excluded during transformation.
 Alternatively, you can set exclusion strategy during transformation:
 
-```typescript
+```javascript
 import {classToPlain} from "class-transformer";
 let photo = classToPlain(photo, { strategy: "excludeAll" });
 ```
@@ -535,7 +535,7 @@ In this case you don't need to `@Exclude()` a whole class.
 If you name your private properties with a prefix, lets say with `_`,
 then you can exclude such properties from transformation too:
 
-```typescript
+```javascript
 import {classToPlain} from "class-transformer";
 let photo = classToPlain(photo, { excludePrefixes: ["_"] });
 ```
@@ -544,7 +544,7 @@ This will skip all properties that start with `_` prefix.
 You can pass any number of prefixes and all properties that begin with these prefixes will be ignored.
 For example:
 
-```typescript
+```javascript
 import {Expose} from "class-transformer";
 
 export class User {
@@ -580,7 +580,7 @@ const plainUser = classToPlain(user, { excludePrefixes: ["_"] });
 
 You can use groups to control what data will be exposed and what will not be:
 
-```typescript
+```javascript
 import {Exclude, Expose} from "class-transformer";
 
 @Exclude()
@@ -598,7 +598,7 @@ export class User {
 }
 ```
 
-```typescript
+```javascript
 import {classToPlain} from "class-transformer";
 let user1 = classToPlain(user, { groups: ["user"] }); // will contain id, name, email and password
 let user2 = classToPlain(user, { groups: ["admin"] }); // will contain id, name and email
@@ -609,7 +609,7 @@ let user2 = classToPlain(user, { groups: ["admin"] }); // will contain id, name 
 If you are building an API that has different versions, class-transformer has extremely useful tools for that.
 You can control which properties of your model should be exposed or excluded in what version. Example:
 
-```typescript
+```javascript
 import {Exclude, Expose} from "class-transformer";
 
 @Exclude()
@@ -627,7 +627,7 @@ export class User {
 }
 ```
 
-```typescript
+```javascript
 import {classToPlain} from "class-transformer";
 let user1 = classToPlain(user, { version: 0.5 }); // will contain id and name
 let user2 = classToPlain(user, { version: 0.7 }); // will contain id, name and email
@@ -642,7 +642,7 @@ Sometimes you have a Date in your plain javascript object received in a string f
 And you want to create a real javascript Date object from it.
 You can do it simply by passing a Date object to the `@Type` decorator:
 
-```typescript
+```javascript
 import {Type} from "class-transformer";
 
 export class User {
@@ -668,7 +668,7 @@ primitive types when you want to convert your values into these types.
 When you are using arrays you must provide a type of the object that array contains.
 This type, you specify in a `@Type()` decorator:
 
-```typescript
+```javascript
 import {Type} from "class-transformer";
 
 export class Photo {
@@ -684,7 +684,7 @@ export class Photo {
 
 You can also use custom array types:
 
-```typescript
+```javascript
 import {Type} from "class-transformer";
 
 export class AlbumCollection extends Array<Album> {
@@ -706,7 +706,7 @@ Library will handle proper transformation automatically.
 
 ES6 collections `Set` and `Map` also require the `@Type` decorator:
 
-```typescript
+```javascript
 export class Skill {
     name: string;
 }
@@ -735,7 +735,7 @@ You can perform additional data transformation using `@Transform` decorator.
 For example, you want to make your `Date` object to be a `moment` object when you are
 transforming object from plain to class:
 
-```typescript
+```javascript
 import {Transform} from "class-transformer";
 import * as moment from "moment";
 import {Moment} from "moment";
@@ -780,7 +780,7 @@ ClassTransformOptions - The transform options like groups, version, name
 
 An example:
 
-```typescript
+```javascript
 @Exclude()
 class User {
 
@@ -861,7 +861,7 @@ Circular references are not ignored only during `classToClass` operation.
 
 Lets say you want to download users and want them automatically to be mapped to the instances of `User` class.
 
-```typescript
+```javascript
 import {plainToClass} from "class-transformer";
 
 this.http
